@@ -1,0 +1,168 @@
+C_s
+[
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 16.0, "element": "O"},  # 산소
+    {"coordinates": [0.0, 1.0, 0.0], "mass": 35.5, "element": "Cl"},  # 염소
+    {"coordinates": [1.0, 1.5, 0.0], "mass": 1.0, "element": "H"}   # 수소
+]
+
+C_2
+atoms = [
+    {"coordinates": [0.7247, 0.0, 0.0], "mass": 16.0, "element": "O"},  # 산소 1
+    {"coordinates": [-0.7247, 0.0, 0.0], "mass": 16.0, "element": "O"}, # 산소 2
+    {"coordinates": [0.8233, -0.7, -0.6676], "mass": 1.0, "element": "H"}, # 수소 1
+    {"coordinates": [-0.8233, -0.6175, 0.7446], "mass": 1.0, "element": "H"} # 수소 2
+]
+
+D_6h
+atoms = [
+    {"coordinates": [-1.2131, -0.6884, 0.0], "mass": 12.0, "element": "C"},  # 탄소 1
+    {"coordinates": [-1.2028, 0.7064, 0.0001], "mass": 12.0, "element": "C"},  # 탄소 2
+    {"coordinates": [-0.0103, -1.3948, 0.0], "mass": 12.0, "element": "C"},  # 탄소 3
+    {"coordinates": [0.0104, 1.3948, -0.0001], "mass": 12.0, "element": "C"},  # 탄소 4
+    {"coordinates": [1.2028, -0.7063, 0.0], "mass": 12.0, "element": "C"},  # 탄소 5
+    {"coordinates": [1.2131, 0.6884, 0.0], "mass": 12.0, "element": "C"},  # 탄소 6
+    {"coordinates": [-2.1577, -1.2244, 0.0], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-2.1393, 1.2564, 0.0001], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [-0.0184, -2.4809, -0.0001], "mass": 1.0, "element": "H"},  # 수소 3
+    {"coordinates": [0.0184, 2.4808, 0.0], "mass": 1.0, "element": "H"},  # 수소 4
+    {"coordinates": [2.1394, -1.2563, 0.0001], "mass": 1.0, "element": "H"},  # 수소 5
+    {"coordinates": [2.1577, 1.2245, 0.0], "mass": 1.0, "element": "H"}  # 수소 6
+]
+
+
+
+D_3d
+atoms = [
+    {"coordinates": [-0.756, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 1
+    {"coordinates": [0.756, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 2
+    {"coordinates": [-1.1404, 0.6586, 0.7845], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-1.1404, 0.3501, -0.9626], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [-1.1405, -1.0087, 0.1781], "mass": 1.0, "element": "H"},  # 수소 3
+    {"coordinates": [1.1404, -0.3501, 0.9626], "mass": 1.0, "element": "H"},   # 수소 4
+    {"coordinates": [1.1405, 1.0087, -0.1781], "mass": 1.0, "element": "H"},   # 수소 5
+    {"coordinates": [1.1404, -0.6586, -0.7845], "mass": 1.0, "element": "H"}   # 수소 6
+]
+
+D_2h
+atoms = [
+    {"coordinates": [-0.6672, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 1
+    {"coordinates": [0.6672, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 2
+    {"coordinates": [-1.2213, -0.929, 0.0708], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-1.2212, 0.929, -0.0708], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [1.2213, 0.929, -0.0708], "mass": 1.0, "element": "H"},   # 수소 3
+    {"coordinates": [1.2213, -0.929, 0.0708], "mass": 1.0, "element": "H"}   # 수소 4
+]
+
+D_4h
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 195.08, "element": "Pt"},  # 백금
+    {"coordinates": [2.31, 0.0, 0.0], "mass": 35.45, "element": "Cl"},  # 염소 1
+    {"coordinates": [-2.31, 0.0, 0.0], "mass": 35.45, "element": "Cl"},  # 염소 2
+    {"coordinates": [0.0, 2.31, 0.0], "mass": 35.45, "element": "Cl"},  # 염소 3
+    {"coordinates": [0.0, -2.31, 0.0], "mass": 35.45, "element": "Cl"}  # 염소 4
+]
+
+D∞
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소
+    {"coordinates": [1.16, 0.0, 0.0], "mass": 16.0, "element": "O"},  # 산소
+    {"coordinates": [-1.16, 0.0, 0.0], "mass": 16.0, "element": "O"}  # 산소
+]
+
+C2v
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 16.0, "element": "O"},  # 산소
+    {"coordinates": [0.5860, 0.7568, 0.0], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-0.5860, 0.7568, 0.0], "mass": 1.0, "element": "H"}  # 수소 2
+]
+
+C3v
+atoms = [
+    {"coordinates": [0.0, 0.0, -0.1], "mass": 14.0, "element": "N"},  # 질소
+    {"coordinates": [0.8161, 0.0, 0.5951], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-0.4080, 0.7067, 0.5951], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [-0.4080, -0.7067, 0.5951], "mass": 1.0, "element": "H"}  # 수소 3
+]
+
+Td
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소
+    {"coordinates": [1.09, 0.0, 0.0], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-0.3633, 1.0278, 0.0], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [-0.3633, -0.5139, 0.8892], "mass": 1.0, "element": "H"},  # 수소 3
+    {"coordinates": [-0.3633, -0.5139, -0.8892], "mass": 1.0, "element": "H"}  # 수소 4
+]
+
+D_3h
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 10.81, "element": "B"},  # 붕소
+    {"coordinates": [1.30, 0.0, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 1
+    {"coordinates": [-0.65, 1.125, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 2
+    {"coordinates": [-0.65, -1.125, 0.0], "mass": 18.998, "element": "F"}  # 플루오린 3
+]
+
+Oh
+atoms = [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 32.06, "element": "S"},  # 황
+    {"coordinates": [1.56, 0.0, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 1
+    {"coordinates": [-1.56, 0.0, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 2
+    {"coordinates": [0.0, 1.56, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 3
+    {"coordinates": [0.0, -1.56, 0.0], "mass": 18.998, "element": "F"},  # 플루오린 4
+    {"coordinates": [0.0, 0.0, 1.56], "mass": 18.998, "element": "F"},  # 플루오린 5
+    {"coordinates": [0.0, 0.0, -1.56], "mass": 18.998, "element": "F"}  # 플루오린 6
+]
+
+C3v
+atoms= [
+    {"coordinates": [0.0, 0.0, 0.0], "mass": 12.01, "element": "C"},  # 탄소
+    {"coordinates": [0.0, 0.0, 1.78], "mass": 35.45, "element": "Cl"},  # 염소
+    {"coordinates": [1.09, 0.0, 0.0], "mass": 1.008, "element": "H"},  # 수소 1
+    {"coordinates": [-0.545, 0.944, 0.0], "mass": 1.008, "element": "H"},  # 수소 2
+    {"coordinates": [-0.545, -0.944, 0.0], "mass": 1.008, "element": "H"},  # 수소 3
+]
+
+D_6h
+atoms = [
+    {"coordinates": [1.39, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 1
+    {"coordinates": [0.695, 1.204, 0.0], "mass": 12.0, "element": "C"},  # 탄소 2
+    {"coordinates": [-0.695, 1.204, 0.0], "mass": 12.0, "element": "C"},  # 탄소 3
+    {"coordinates": [-1.39, 0.0, 0.0], "mass": 12.0, "element": "C"},  # 탄소 4
+    {"coordinates": [-0.695, -1.204, 0.0], "mass": 12.0, "element": "C"},  # 탄소 5
+    {"coordinates": [0.695, -1.204, 0.0], "mass": 12.0, "element": "C"},  # 탄소 6
+    {"coordinates": [2.48, 0.0, 0.0], "mass": 1.008, "element": "H"},  # 수소 1
+    {"coordinates": [1.24, 2.148, 0.0], "mass": 1.008, "element": "H"},  # 수소 2
+    {"coordinates": [-1.24, 2.148, 0.0], "mass": 1.008, "element": "H"},  # 수소 3
+    {"coordinates": [-2.48, 0.0, 0.0], "mass": 1.008, "element": "H"},  # 수소 4
+    {"coordinates": [-1.24, -2.148, 0.0], "mass": 1.008, "element": "H"},  # 수소 5
+    {"coordinates": [1.24, -2.148, 0.0], "mass": 1.008, "element": "H"}   # 수소 6
+]
+
+D_2
+atoms=[
+    {"coordinates": [0.4697, 1.1256, -0.6365], "mass": 12.0, "element": "C"},  # 탄소 1
+    {"coordinates": [-0.4698, 1.1257, 0.6362], "mass": 12.0, "element": "C"},  # 탄소 2
+    {"coordinates": [-0.4698, -1.1257, -0.6362], "mass": 12.0, "element": "C"},  # 탄소 3
+    {"coordinates": [0.4698, -1.1256, 0.6366], "mass": 12.0, "element": "C"},  # 탄소 4
+    {"coordinates": [0.0, -0.0002, -1.5817], "mass": 12.0, "element": "C"},  # 탄소 5
+    {"coordinates": [0.0, 0.0003, 1.5817], "mass": 12.0, "element": "C"},  # 탄소 6
+    {"coordinates": [-1.9106, 0.7385, 0.2315], "mass": 1.0, "element": "H"},  # 수소 1
+    {"coordinates": [-1.9105, -0.7387, -0.2315], "mass": 1.0, "element": "H"},  # 수소 2
+    {"coordinates": [1.9105, 0.7385, -0.2318], "mass": 1.0, "element": "H"},  # 수소 3
+    {"coordinates": [1.9106, -0.7385, 0.2317], "mass": 1.0, "element": "H"},  # 수소 4
+    {"coordinates": [0.4483, 2.0966, -1.1412], "mass": 1.0, "element": "H"},  # 수소 5
+    {"coordinates": [-0.4485, 2.0970, 1.1406], "mass": 1.0, "element": "H"},  # 수소 6
+    {"coordinates": [-0.4483, -2.0969, -1.1406], "mass": 1.0, "element": "H"},  # 수소 7
+    {"coordinates": [0.4484, -2.0966, 1.1414], "mass": 1.0, "element": "H"},  # 수소 8
+    {"coordinates": [0.8076, -0.3415, -2.2406], "mass": 1.0, "element": "H"},  # 수소 9
+    {"coordinates": [-0.8075, 0.3407, -2.2407], "mass": 1.0, "element": "H"},  # 수소 10
+    {"coordinates": [0.8076, 0.3417, 2.2406], "mass": 1.0, "element": "H"},  # 수소 11
+    {"coordinates": [-0.8076, -0.3407, 2.2407], "mass": 1.0, "element": "H"},  # 수소 12
+    {"coordinates": [-2.6025, 0.8603, 1.0729], "mass": 1.0, "element": "H"},  # 수소 13
+    {"coordinates": [-2.2662, 1.3948, -0.5716], "mass": 1.0, "element": "H"},  # 수소 14
+    {"coordinates": [-2.6024, -0.8604, -1.0729], "mass": 1.0, "element": "H"},  # 수소 15
+    {"coordinates": [-2.266, -1.3950, 0.5716], "mass": 1.0, "element": "H"},  # 수소 16
+    {"coordinates": [2.2661, 1.3952, 0.5711], "mass": 1.0, "element": "H"},  # 수소 17
+    {"coordinates": [2.6023, 0.8600, -1.0733], "mass": 1.0, "element": "H"},  # 수소 18
+    {"coordinates": [2.2661, -1.3951, -0.5712], "mass": 1.0, "element": "H"},  # 수소 19
+    {"coordinates": [2.6025, -0.8599, 1.0732], "mass": 1.0, "element": "H"}  # 수소 20
+]
