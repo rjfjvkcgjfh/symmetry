@@ -1,0 +1,117 @@
+import sqlite3
+import numpy as np
+import csv
+
+API_KEY = REMOVED
+
+def get_id_from_csv(csv_path):
+    ans = []
+    with open(csv_path) as f:
+        mat_id = csv.reader(f, delimiter=",")
+        next(mat_id, None)
+        for row in mat_id:
+            ans.append(row[0])
+    return ans
+
+def create_and_connect_db(db_name):
+    conn = sqlite3.connect(db_name)
+    conn.execute("""
+                    CREATE TABLE IF NOT EXISTS CRYSTAL (
+                        ID INT PRIMARY KEY NOT NULL,
+                        FORMULA TEXT NOT NULL,
+                        A1X REAL  NOT NULL,
+                        A1Y REAL  NOT NULL,
+                        A1Z REAL  NOT NULL,
+                        A2X REAL  NOT NULL,
+                        A2Y REAL  NOT NULL,
+                        A2Z REAL  NOT NULL,
+                        A3X REAL  NOT NULL,
+                        A3Y REAL  NOT NULL,
+                        A3Z REAL  NOT NULL
+                    )
+                 """)
+    conn.execute("""
+                    CREATE TABLE IF NOT EXISTS POSITION (
+                        ID      INT  NOT NULL,
+                        IDX     INT  NOT NULL,
+                        ELEMENT TEXT NOT NULL,
+                        X       REAL NOT NULL,
+                        Y       REAL NOT NULL,
+                        Z       REAL NOT NULL,
+                        PRIMARY KEY (ID, IDX)
+                    )
+                 """)
+    conn.execute("""
+                    CREATE TABLE IF NOT EXISTS BANDGAP (
+                        ID INT PRIMARY KEY NOT NULL,
+                        BANDGAP REAL  NOT NULL
+                    )
+                 """)
+    conn.execute("""CREATE INDEX IF NOT EXISTS POSITION_ID ON POSITION (ID)""")
+    conn.commit()
+    return conn
+
+def get_structure_bundle(conn: sqlite3.Connection, mpr, bundle):
+    docs = mpr.summary.search(
+        material_ids=bundle, fields=["material_id", "structure", "formula_pretty", "band_gap", "elements"]
+    )
+    for doc in docs:
+        mat_id = doc.material_id
+        st = doc.structure
+        coords = st.cart_coords
+        elems = [str(e) for e in st.species]
+        lattice = st.lattice.matrix
+        formula = doc.formula_pretty
+        conn.execute("""
+            INSERT INTO CRYSTAL(ID, FORMULA, A1X, A1Y, A1Z, A2X, A2Y, A2Z, A3X, A3Y, A3Z) VALUES (?, ?, ? ,? ,? ,? ,? ,? ,? ,? ,?)
+        """, (int(mat_id[3:]), formula, *lattice[0], *lattice[1], *lattice[2]))
+        conn.execute("""
+            INSERT INTO BANDGAP(ID, BANDGAP) VALUES (?, ?)
+        """, (int(mat_id[3:]), doc.band_gap))
+        for idx, (c, e) in enumerate(zip(coords, elems)):
+            conn.execute("""
+                INSERT INTO POSITION(ID, IDX, ELEMENT, X, Y, Z) VALUES (?, ?, ? ,? ,? ,?)
+            """, (int(mat_id[3:]), idx, e, *c))
+    conn.commit()
+
+def get_structure(conn, ids, batch=10000, api_key=API_KEY):
+    from mp_api.client import MPRester
+    remain = ids
+    with MPRester(api_key) as mpr:
+        while len(remain) > 0:
+            bundle = remain[:batch]
+            get_structure_bundle(conn, mpr, bundle)
+            remain = remain[batch:]
+
+def read_crystal_id(conn: sqlite3.Connection):
+    ans = []
+    for row in conn.execute("select ID from BANDGAP where BANDGAP > 0"):
+        ans.append(f"mp-{row[0]}")
+    return ans
+
+def get_crystal_info(conn: sqlite3.Connection, matid):
+    formula = list(conn.execute("SELECT FORMULA FROM CRYSTAL WHERE ID= ?", (int(matid[3:]), )))[0][0]
+    lattice = list(conn.execute("SELECT A1X, A1Y, A1Z, A2X, A2Y, A2Z, A3X, A3Y, A3Z FROM CRYSTAL WHERE ID= ?", (int(matid[3:]), )))[0]
+    lattice = np.array([lattice[0:3], lattice[3:6], lattice[6:9]])
+    bandgap = list(conn.execute("SELECT BANDGAP FROM BANDGAP WHERE ID= ?", (int(matid[3:]), )))[0][0]
+    elems_and_coords = list(conn.execute("SELECT ELEMENT, X, Y, Z FROM POSITION WHERE ID= ?", (int(matid[3:]), )))
+    elems = [e for (e, _, _, _) in elems_and_coords]
+    coords = np.array([(x, y, z) for (_, x, y, z) in elems_and_coords])
+
+    return {
+        "formula": formula,
+        "elements": elems,
+        "lattice": lattice,
+        "coordinates": coords,
+        "bandgap": bandgap
+    }
+
+
+if __name__=="__main__":
+    conn = create_and_connect_db("data.sqlite")
+    # ids = get_id_from_csv("mp_whole_data.csv")
+    # get_structure(conn, ids)
+    ids = read_crystal_id(conn)
+    print(ids[837])
+    print(get_crystal_info(conn, ids[837]))
+
