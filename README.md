@@ -35,19 +35,18 @@ pip install numpy ase
 
 ------
 
-# 리포지터리 구조
-
-
+```bash
 ├── README.md
 ├── main.py                   # 국소 대칭 계산 메인 스크립트
-├── element_mass.py               # 원소 질량 정보 제공 모듈
+├── element_mass.py           # 원소 질량 정보 제공 모듈
 ├── calculate_primary_moments.py  # 주 모멘트 계산 모듈
-├── check_proper_axes.py          # 올바른 회전축 판별 모듈
-├── check_inversion_center.py     # 역 중심 검사 모듈
-├── check_reflection_plane.py     # 반사면 검사 모듈
-├── check_improper_axis.py        # 반회전축 검사 모듈
-├── data.sqlite                   #SQLite 데이터베이스스 
-└── data_new.py                   # SQLite 데이터베이스 연동모듈
+├── check_proper_axes.py      # 올바른 회전축 판별 모듈
+├── check_inversion_center.py # 역 중심 검사 모듈
+├── check_reflection_plane.py # 반사면 검사 모듈
+├── check_improper_axis.py    # 반회전축 검사 모듈
+├── data.sqlite               # SQLite 데이터베이스
+└── data_new.py               # SQLite 연동 모듈
+```
 
 # 사용법
 
