@@ -1,0 +1,146 @@
+import numpy as np
+from calculate_primary_moments import calculate_primary_moments
+
+
+def check_proper_axes(shifted_atoms, eigenvectors, max_degree=6):
+    proper_axes = []
+
+    # Step 1: Check along Principal Axes (eigenvectors)
+    for axis in eigenvectors:
+        for n in range(2, max_degree + 1):
+            if is_proper_axis(shifted_atoms, axis, n):
+                proper_axes.append(((tuple(axis)), n))
+
+    # Step 2: Check 중심원자와 각 Atoms vector
+    for shifted_atom in shifted_atoms:
+        shifted_atom["coordinates"] = np.array(shifted_atom["coordinates"])
+        axis = shifted_atom["coordinates"]
+        norm = np.linalg.norm(axis)
+        if norm > 0:
+            axis /= norm  # Normalize
+            for n in range(2, max_degree + 1):
+                if is_proper_axis(shifted_atoms, axis, n):
+                    proper_axes.append(((tuple(axis)), n))
+
+    # Step 3: Check 중심원자와 각 Atoms의 Midpoint vectors
+    k = len(shifted_atoms)
+    for i in range(k):
+        for j in range(i + 1, k):
+            if shifted_atoms[i]["element"] == shifted_atoms[j]["element"]:
+                midpoint = (
+                    shifted_atoms[i]["coordinates"] + shifted_atoms[j]["coordinates"]
+                ) / 2
+                axis = midpoint
+                norm = np.linalg.norm(axis)
+                if norm > 0:
+                    axis /= norm  # Normalize
+                for n in range(2, max_degree + 1):
+                    if is_proper_axis(shifted_atoms, axis, n):
+                        proper_axes.append((tuple(axis), n))
+    proper_axes = [
+        item for item in proper_axes if not (item[0] == np.array([0.0, 0.0, 0.0])).all()
+    ]
+    return proper_axes
+
+
+# Check if the axis is a proper rotational axis
+def is_proper_axis(shifted_atoms, axis, n):
+    angle = 2 * np.pi / n
+    rotation_matrix = create_rotation_matrix(axis, angle)
+    for shifted_atom in shifted_atoms:
+        rotated = np.dot(rotation_matrix, shifted_atom["coordinates"])
+        if not any(
+            shifted_atom["element"] == other["element"]
+            and np.allclose(rotated, other["coordinates"], atol=1e-3)
+            for other in shifted_atoms
+        ):
+            return False
+    return True
+
+
+def create_rotation_matrix(axis, angle):
+    x, y, z = axis
+    cos_theta = np.cos(angle)
+    sin_theta = np.sin(angle)
+    one_minus_cos = 1 - cos_theta
+    return np.array(
+        [
+            [
+                cos_theta + x**2 * one_minus_cos,
+                x * y * one_minus_cos - z * sin_theta,
+                x * z * one_minus_cos + y * sin_theta,
+            ],
+            [
+                y * x * one_minus_cos + z * sin_theta,
+                cos_theta + y**2 * one_minus_cos,
+                y * z * one_minus_cos - x * sin_theta,
+            ],
+            [
+                z * x * one_minus_cos - y * sin_theta,
+                z * y * one_minus_cos + x * sin_theta,
+                cos_theta + z**2 * one_minus_cos,
+            ],
+        ]
+    )
+
+
+def get_unique_axes_with_max_n(proper_axes):
+    unique_axes = []
+    for axis, n in proper_axes:
+        axis = np.array(axis)
+        norm = np.linalg.norm(axis)
+        if norm > 0:
+            axis /= norm  # Normalize
+        for i, (other_axis, other_n) in enumerate(unique_axes):
+            # Check for both positive and negative directions
+            if np.allclose(axis, other_axis, atol=1e-3) or np.allclose(
+                axis, -other_axis, atol=1e-3
+            ):
+                unique_axes[i] = (
+                    other_axis,
+                    max(other_n, n),
+                )  # Update with the highest order
+                break
+        else:
+            unique_axes.append((axis, n))
+
+    return unique_axes
+
+
+# 가장 높은 차수의 Principal Axis 찾기
+def find_principal_axis(proper_axes):
+
+    if not proper_axes:
+        return None  # proper_axes가 비어 있으면 None 반환
+    return max(proper_axes, key=lambda x: x[1])
+
+
+def get_proper_axes_and_principal_axis(proper_axes, principal_axis):
+
+    if principal_axis is not None:  # principal_axis가 None이 아닌지 확인
+        # proper_axes에서 principal_axis 제거
+        proper_axes = [
+            pa
+            for pa in proper_axes
+            if not (
+                np.allclose(principal_axis[0], pa[0], atol=1e-3)
+                and principal_axis[1] == pa[1]
+            )
+        ]
+
+    return proper_axes, principal_axis
+
+
+if __name__ == "__main__":
+    from main import atoms
+
+    shifted_atoms, _, _, eigenvectors, _, _ = calculate_primary_moments(atoms)
+    raw_proper_axes = check_proper_axes(shifted_atoms, eigenvectors)
+    proper_axes = get_unique_axes_with_max_n(raw_proper_axes)
+    principal_axis = find_principal_axis(proper_axes)
+    proper_axes, principal_axis = get_proper_axes_and_principal_axis(
+        proper_axes, principal_axis
+    )
+
+    print("Proper Axes:", proper_axes)
+    print("Principal Axis:", principal_axis)
