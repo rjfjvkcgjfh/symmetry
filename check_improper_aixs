@@ -1,0 +1,90 @@
+import numpy as np
+from check_proper_axes import create_rotation_matrix
+
+
+def check_improper_axis(eigenvectors, shifted_atoms):
+    improper_axes = []
+    n_values = [2, 3]
+    axes = []
+
+    axes.extend(eigenvectors)
+
+    for shifted_atom in shifted_atoms:
+        axis = shifted_atom["coordinates"]
+        norm = np.linalg.norm(axis)
+        if norm > 0:
+            axis /= norm  # Normalize
+            axes.append(axis)
+
+    k = len(shifted_atoms)
+    for i in range(k):
+        for j in range(i + 1, k):
+            if shifted_atoms[i]["element"] == shifted_atoms[j]["element"]:
+                midpoint = (
+                    np.array(shifted_atoms[i]["coordinates"])
+                    + np.array(shifted_atoms[j]["coordinates"])
+                ) / 2
+                axis = midpoint
+                norm = np.linalg.norm(axis)
+                if norm > 0:
+                    axis /= norm  # Normalize
+                    axes.append(axis)
+
+    for n in n_values:
+        angle = 2 * np.pi / (2 * n)
+        for axis in axes:
+            rotation_matrix = create_rotation_matrix(axis, angle)
+
+            symmetry_valid = True
+            for atom in shifted_atoms:
+                coords = np.array(atom["coordinates"], dtype=float)
+                # 회전 적용
+                rotated = np.dot(rotation_matrix, coords)
+                # 반사 적용 (대칭축에 수직인 평면에 대해 반사)
+                reflected = rotated - 2 * np.dot(rotated, axis) * axis
+
+                # 변환된 좌표와 같은 원자(element)를 가진 원자가 분자 내에 존재해야 함.
+                # 모든 원자에 대해 대응 원자가 있는지 확인
+                if not any(
+                    atom["element"] == other["element"]
+                    and np.allclose(reflected, other["coordinates"], atol=1e-3)
+                    for other in shifted_atoms
+                ):
+                    symmetry_valid = False
+                    break  # 하나라도 안 맞으면 이 대칭축은 제외
+            if symmetry_valid:
+                improper_axes.append((tuple(axis), n))
+
+    return improper_axes
+
+
+def get_unique_axes_with_max_n(improper_axes):
+    unique_axes = []
+    for axis, n in improper_axes:
+        axis = np.array(axis) / np.linalg.norm(axis)  # Normalize the axis
+        for i, (other_axis, other_n) in enumerate(unique_axes):
+            # Check for both positive and negative directions
+            if np.allclose(axis, other_axis, atol=1e-3) or np.allclose(
+                axis, -other_axis, atol=1e-3
+            ):
+                unique_axes[i] = (
+                    other_axis,
+                    max(other_n, n),
+                )  # Update with the highest order
+                break
+        else:
+            unique_axes.append((axis, n))
+    return unique_axes
+
+
+if __name__ == "__main__":
+    from calculate_primary_moments import calculate_primary_moments
+    from main import atoms
+
+    shifted_atoms, _, _, eigenvectors, _, _ = calculate_primary_moments(atoms)
+
+    improper_axes = check_improper_axis(eigenvectors, shifted_atoms)
+    unique_improper_axes = get_unique_axes_with_max_n(improper_axes)
+
+    # Output results
+    print(unique_improper_axes)
