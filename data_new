@@ -2,7 +2,7 @@ import sqlite3
 import numpy as np
 import csv
 
-API_KEY = REMOVED
+API_KEY = ""
 
 def get_id_from_csv(csv_path):
     ans = []
