@@ -1,0 +1,70 @@
+import numpy as np
+
+
+def check_reflection_plane(shifted_atoms, principal_axis):
+    sigma_v = []  # 주축 포함 평면벡터
+    sigma_h = []  # 주축 법선벡터
+
+    # Step 1: Search for planes orthogonal to Proper Axes
+    if principal_axis is not None:
+        normal = np.array(np.array(principal_axis[0]))
+        if is_reflection_plane(shifted_atoms, normal):
+            sigma_h.append(normal)
+
+    # Step 2: Midpoints between like-atoms
+    k = len(shifted_atoms)
+    for i in range(k):
+        for j in range(i + 1, k):
+            if shifted_atoms[i]["element"] == shifted_atoms[j]["element"]:
+                # 같은 원자 쌍의 중점 계산
+                pos1 = np.array(shifted_atoms[i]["coordinates"])
+                pos2 = np.array(shifted_atoms[j]["coordinates"])
+                midpoint = (pos1 + pos2) / 2
+
+                # 중점과 pos2 연결하는 벡터로 법선 생성
+                normal = pos2 - midpoint
+                if np.linalg.norm(normal) < 1e-6:  # 너무 작은 벡터 무시
+                    continue
+                normal /= np.linalg.norm(normal)  # Normalize
+                if is_reflection_plane(shifted_atoms, normal):
+                    sigma_v.append(normal)
+
+    return sigma_h, sigma_v
+
+
+# Reflection Plane 확인 함수
+def is_reflection_plane(shifted_atoms, normal):
+
+    for shifted_atom in shifted_atoms:
+        reflected = (
+            shifted_atom["coordinates"]
+            - 2 * np.dot(shifted_atom["coordinates"], normal) * normal
+        )
+
+        # 반사된 좌표가 다른 원자의 좌표와 일치하지 않으면 False
+        if not any(
+            shifted_atom["element"] == other["element"]
+            and np.allclose(reflected, other["coordinates"], atol=1e-3)
+            for other in shifted_atoms
+        ):
+            return False
+    return True
+
+
+if __name__ == "__main__":
+
+    from calculate_primary_moments import calculate_primary_moments
+    from main import atoms
+    from check_proper_axes import get_proper_axes_and_principal_axis
+
+    _, shifted_atoms, _, _, _, _, _ = calculate_primary_moments(atoms)
+
+    _, principal_axis = get_proper_axes_and_principal_axis(atoms)
+
+    sigma_h, sigma_v = check_reflection_plane(shifted_atoms, principal_axis)
+
+    if sigma_h or sigma_v:
+        print("sigma_h:", sigma_h)
+        print("sigma_v:", sigma_v)
+    else:
+        print(False)
