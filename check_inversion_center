@@ -1,0 +1,25 @@
+import numpy as np
+from calculate_primary_moments import calculate_primary_moments
+
+
+def check_inversion_center(shifted_atoms):
+    for shifted_atom in shifted_atoms:
+        # Calculate reflected position
+        reflected = -shifted_atom["coordinates"]
+        # Check if reflected position matches any other atom's coordinates
+        if not any(
+            shifted_atom["element"] == other["element"]
+            and np.allclose(reflected, other["coordinates"], atol=1e-3)
+            for other in shifted_atoms
+        ):
+            return False
+    return True
+
+
+if __name__ == "__main__":
+    from main import local_atoms
+
+    shifted_atoms, _, _, _, _, _ = calculate_primary_moments(local_atoms)
+
+    has_inversion_center = check_inversion_center(shifted_atoms)
+    print("check_inversion_center", has_inversion_center)
