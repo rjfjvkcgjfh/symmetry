@@ -1,4 +1,4 @@
-# Local Symmetry Detection for Crystals and symmetry Molecules
+# Local Symmetry Detection for Crystals and symmetry of Molecules
 
 이 리포지토리는 분자 및 결정 구조의 국소 대칭(점군)을 계산하는 Python 모듈들을 제공합니다. 여러 기하학적 대칭 요소(회전축, 반사면, 역 중심, 반회전축 등)를 분석하여 대상 구조의 대칭성을 분류합니다.
 
@@ -30,8 +30,9 @@
 
 필요한 패키지는 아래 명령어로 설치할 수 있습니다:
 
-bash
+```bash
 pip install numpy ase
+```
 
 ------
 
