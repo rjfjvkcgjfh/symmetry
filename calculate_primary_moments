@@ -1,0 +1,74 @@
+import numpy as np
+
+
+def shift_coordinates(local_atoms):
+    shifted_atoms = local_atoms
+    return shifted_atoms
+
+
+# Calculate the inertia tensor
+def calculate_inertia_tensor(shifted_atoms):
+    inertia_tensor = np.zeros((3, 3))
+    for shifted_atom in shifted_atoms:
+        r = shifted_atom["coordinates"]
+        m = shifted_atom["mass"]
+        inertia_tensor += m * (np.dot(r, r) * np.eye(3) - np.outer(r, r))
+    return inertia_tensor
+
+
+# Diagonalize the inertia tensor
+def diagonalize_inertia_tensor(inertia_tensor):
+    eigenvalues, eigenvectors = np.linalg.eigh(inertia_tensor)
+    return eigenvalues, eigenvectors
+
+
+def determine_degeneracy(eigenvalues, tol=0.05, zero_tol=1e-10):
+    Ia, Ib, Ic = sorted(eigenvalues)
+    degeneracy = sum(
+        [
+            np.isclose(Ia, Ib, rtol=tol),
+            np.isclose(Ib, Ic, rtol=tol),
+            np.isclose(Ia, Ic, rtol=tol),
+        ]
+    )
+
+    if (
+        np.isclose(Ia, 0.0, atol=zero_tol)
+        or np.isclose(Ib, 0.0, atol=zero_tol)
+        or np.isclose(Ic, 0.0, atol=zero_tol)
+    ):
+        return "Linear molecule", degeneracy
+    elif degeneracy == 3:
+        return "Spherical top", degeneracy
+    elif degeneracy == 1:
+        return "symmetric top", degeneracy
+    return "Asymmetric top", degeneracy
+
+
+def calculate_primary_moments(local_atoms, tol=0.05):
+    shifted_atoms = shift_coordinates(local_atoms)
+    inertia_tensor = calculate_inertia_tensor(shifted_atoms)
+    eigenvalues, eigenvectors = diagonalize_inertia_tensor(inertia_tensor)
+    molecule_type, degeneracy = determine_degeneracy(eigenvalues, tol)
+    return (
+        shifted_atoms,
+        inertia_tensor,
+        eigenvalues,
+        eigenvectors,
+        molecule_type,
+        degeneracy,
+    )
+
+
+if __name__ == "__main__":
+    from main import atoms
+
+    (
+        shifted_atoms,
+        inertia_tensor,
+        eigenvalues,
+        eigenvectors,
+        molecule_type,
+        degeneracy,
+    ) = calculate_primary_moments(atoms)
+    print(eigenvalues, eigenvectors, molecule_type, degeneracy)
